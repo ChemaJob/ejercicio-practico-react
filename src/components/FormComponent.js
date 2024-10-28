@@ -1,48 +1,63 @@
 import React, { useState } from 'react';
-
-const mockUserData = {
-  1: { nombre: 'Juan', apellidoPaterno: 'Perez', apellidoMaterno: 'Gomez' },
-  2: { nombre: 'Maria', apellidoPaterno: 'Lopez', apellidoMaterno: 'Rodriguez' },
-};
+import { Form, Input, Button, message } from 'antd';
+import 'antd/dist/antd.css';
+import simulateApiCall from './Simulation';
 
 const FormComponent = () => {
   const [userId, setUserId] = useState('');
+  const [displayedUserId, setDisplayedUserId] = useState('');
   const [userData, setUserData] = useState({});
+  const [searchStatus, setSearchStatus] = useState('');
 
-  const handleFetchUserData = () => {
-    const data = mockUserData[userId];
-    if (data) {
+  const handleFetchUserData = async () => {
+    try {
+      const data = await simulateApiCall(userId);
       setUserData(data);
-    } else {
+      setSearchStatus('success');
+      setDisplayedUserId(userId);
+      message.success('Usuario encontrado');
+    } catch (error) {
       setUserData({});
-      alert('Usuario no encontrado');
+      setSearchStatus('error');
+      setDisplayedUserId(userId);
+      message.error('Usuario no encontrado, intenta con 12345 o 54321');
     }
   };
 
   return (
-    <div>
+    <div style={{ maxWidth: '400px', margin: 'auto', paddingTop: '50px' }}>
       <h2>Formulario</h2>
-      <input
-        type="text"
-        placeholder="ID Usuario"
-        value={userId}
-        onChange={(e) => setUserId(e.target.value)}
-      />
-      <button onClick={handleFetchUserData}>Buscar</button>
+      <Form layout="vertical">
+        <Form.Item label="ID Usuario">
+          <Input
+            placeholder="ID Usuario"
+            value={userId}
+            onChange={(e) => setUserId(e.target.value)}
+          />
+        </Form.Item>
 
-      <div>
-        <label>ID Usuario:</label>
-        <input type="text" value={userId} readOnly />
+        <Form.Item>
+          <Button type="primary" onClick={handleFetchUserData} block>
+            Buscar
+          </Button>
+        </Form.Item>
 
-        <label>Nombre:</label>
-        <input type="text" value={userData.nombre || ''} readOnly />
+        <Form.Item label="ID Usuario" hasFeedback validateStatus={searchStatus}>
+          <Input value={displayedUserId} readOnly /> {}
+        </Form.Item>
 
-        <label>Apellido Paterno:</label>
-        <input type="text" value={userData.apellidoPaterno || ''} readOnly />
+        <Form.Item label="Nombre">
+          <Input value={userData.nombre || ''} disabled />
+        </Form.Item>
 
-        <label>Apellido Materno:</label>
-        <input type="text" value={userData.apellidoMaterno || ''} readOnly />
-      </div>
+        <Form.Item label="Apellido Paterno">
+          <Input value={userData.apellidoPaterno || ''} disabled />
+        </Form.Item>
+
+        <Form.Item label="Apellido Materno">
+          <Input value={userData.apellidoMaterno || ''} disabled />
+        </Form.Item>
+      </Form>
     </div>
   );
 };
