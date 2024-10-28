@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { Form, Input, Button, message } from 'antd';
+import 'antd/dist/antd.css';
 
 const mockUserData = {
   1: { nombre: 'Juan', apellidoPaterno: 'Perez', apellidoMaterno: 'Gomez' },
@@ -15,34 +17,44 @@ const FormComponent = () => {
       setUserData(data);
     } else {
       setUserData({});
-      alert('Usuario no encontrado');
+      message.error('Usuario no encontrado');
     }
   };
 
   return (
-    <div>
+    <div style={{ maxWidth: '400px', margin: 'auto', paddingTop: '50px' }}>
       <h2>Formulario</h2>
-      <input
-        type="text"
-        placeholder="ID Usuario"
-        value={userId}
-        onChange={(e) => setUserId(e.target.value)}
-      />
-      <button onClick={handleFetchUserData}>Buscar</button>
+      <Form layout="vertical">
+        <Form.Item label="ID Usuario">
+          <Input
+            placeholder="ID Usuario"
+            value={userId}
+            onChange={(e) => setUserId(e.target.value)}
+          />
+        </Form.Item>
 
-      <div>
-        <label>ID Usuario:</label>
-        <input type="text" value={userId} readOnly />
+        <Form.Item>
+          <Button type="primary" onClick={handleFetchUserData} block>
+            Buscar
+          </Button>
+        </Form.Item>
 
-        <label>Nombre:</label>
-        <input type="text" value={userData.nombre || ''} readOnly />
+        <Form.Item label="ID Usuario">
+          <Input value={userId} readOnly />
+        </Form.Item>
 
-        <label>Apellido Paterno:</label>
-        <input type="text" value={userData.apellidoPaterno || ''} readOnly />
+        <Form.Item label="Nombre">
+          <Input value={userData.nombre || ''} disabled />
+        </Form.Item>
 
-        <label>Apellido Materno:</label>
-        <input type="text" value={userData.apellidoMaterno || ''} readOnly />
-      </div>
+        <Form.Item label="Apellido Paterno">
+          <Input value={userData.apellidoPaterno || ''} disabled />
+        </Form.Item>
+
+        <Form.Item label="Apellido Materno">
+          <Input value={userData.apellidoMaterno || ''} disabled />
+        </Form.Item>
+      </Form>
     </div>
   );
 };
