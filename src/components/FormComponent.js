@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Form, Input, Button, message } from 'antd';
+import '../styles.css';
 import 'antd/dist/antd.css';
 import simulateApiCall from './Simulation';
 
@@ -25,39 +26,41 @@ const FormComponent = () => {
   };
 
   return (
-    <div style={{ maxWidth: '400px', margin: 'auto', paddingTop: '50px' }}>
-      <h2>Formulario</h2>
-      <Form layout="vertical">
-        <Form.Item label="ID Usuario">
-          <Input
-            placeholder="ID Usuario"
-            value={userId}
-            onChange={(e) => setUserId(e.target.value)}
-          />
-        </Form.Item>
+    <div className="fcomponent-container">
+      <div className="fcomponent-form-container">
+        <h2>Formulario</h2>
+        <Form layout="vertical">
+          <Form.Item label="ID Usuario">
+            <Input
+              placeholder="ID Usuario"
+              value={userId}
+              onChange={(e) => setUserId(e.target.value)}
+            />
+          </Form.Item>
 
-        <Form.Item>
-          <Button type="primary" onClick={handleFetchUserData} block>
-            Buscar
-          </Button>
-        </Form.Item>
+          <Form.Item>
+            <Button type="primary" onClick={handleFetchUserData} block>
+              Buscar
+            </Button>
+          </Form.Item>
 
-        <Form.Item label="ID Usuario" hasFeedback validateStatus={searchStatus}>
-          <Input value={displayedUserId} readOnly /> {}
-        </Form.Item>
+          <Form.Item label="ID Usuario" hasFeedback validateStatus={searchStatus}>
+            <Input value={displayedUserId} readOnly /> {}
+          </Form.Item>
 
-        <Form.Item label="Nombre">
-          <Input value={userData.nombre || ''} disabled />
-        </Form.Item>
+          <Form.Item label="Nombre">
+            <Input value={userData.nombre || ''} disabled />
+          </Form.Item>
 
-        <Form.Item label="Apellido Paterno">
-          <Input value={userData.apellidoPaterno || ''} disabled />
-        </Form.Item>
+          <Form.Item label="Apellido Paterno">
+            <Input value={userData.apellidoPaterno || ''} disabled />
+          </Form.Item>
 
-        <Form.Item label="Apellido Materno">
-          <Input value={userData.apellidoMaterno || ''} disabled />
-        </Form.Item>
-      </Form>
+          <Form.Item label="Apellido Materno">
+            <Input value={userData.apellidoMaterno || ''} disabled />
+          </Form.Item>
+        </Form>
+      </div>
     </div>
   );
 };
