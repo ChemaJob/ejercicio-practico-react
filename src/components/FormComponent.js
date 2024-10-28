@@ -1,23 +1,26 @@
 import React, { useState } from 'react';
 import { Form, Input, Button, message } from 'antd';
 import 'antd/dist/antd.css';
-
-const mockUserData = {
-  1: { nombre: 'Juan', apellidoPaterno: 'Perez', apellidoMaterno: 'Gomez' },
-  2: { nombre: 'Maria', apellidoPaterno: 'Lopez', apellidoMaterno: 'Rodriguez' },
-};
+import simulateApiCall from './Simulation';
 
 const FormComponent = () => {
   const [userId, setUserId] = useState('');
+  const [displayedUserId, setDisplayedUserId] = useState('');
   const [userData, setUserData] = useState({});
+  const [searchStatus, setSearchStatus] = useState('');
 
-  const handleFetchUserData = () => {
-    const data = mockUserData[userId];
-    if (data) {
+  const handleFetchUserData = async () => {
+    try {
+      const data = await simulateApiCall(userId);
       setUserData(data);
-    } else {
+      setSearchStatus('success');
+      setDisplayedUserId(userId);
+      message.success('Usuario encontrado');
+    } catch (error) {
       setUserData({});
-      message.error('Usuario no encontrado');
+      setSearchStatus('error');
+      setDisplayedUserId(userId);
+      message.error('Usuario no encontrado, intenta con 12345 o 54321');
     }
   };
 
@@ -39,8 +42,8 @@ const FormComponent = () => {
           </Button>
         </Form.Item>
 
-        <Form.Item label="ID Usuario">
-          <Input value={userId} readOnly />
+        <Form.Item label="ID Usuario" hasFeedback validateStatus={searchStatus}>
+          <Input value={displayedUserId} readOnly /> {}
         </Form.Item>
 
         <Form.Item label="Nombre">
